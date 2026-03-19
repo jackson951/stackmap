@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getLoginUrl } from '@/lib/auth';
 import { Button } from '@/components/ui/Button';
-import { Github } from 'lucide-react';
+import { Github, Code, Brain, Users, Sparkles, ArrowRight } from 'lucide-react';
 
 export default function Home() {
   const router = useRouter();
@@ -24,26 +24,43 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-black">
+      {/* Animated Background */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.1),transparent_50%)]"></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      </div>
+
       {/* Navigation */}
-      <nav className="border-b border-gray-800 bg-gray-900/80 backdrop-blur-md sticky top-0 z-50">
+      <nav className="border-b border-white/10 bg-white/5 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-cyan-400 rounded-lg flex items-center justify-center">
-                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
+            <div className="flex items-center space-x-4">
+              <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/25">
+                <Code className="w-6 h-6 text-white" />
               </div>
-              <h1 className="text-xl font-bold text-white">StackMap</h1>
+              <div>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
+                  StackMap
+                </h1>
+                <p className="text-xs text-gray-400">AI Codebase Intelligence</p>
+              </div>
             </div>
-            <Button
-              onClick={handleGetStarted}
-              className="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700"
-            >
-              <Github className="w-4 h-4" />
-              <span>Login with GitHub</span>
-            </Button>
+            <div className="flex items-center space-x-4">
+              <div className="hidden md:flex items-center space-x-2 text-sm text-gray-300">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span>AI-Powered</span>
+              </div>
+              <Button
+                onClick={handleGetStarted}
+                className="group flex items-center space-x-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:shadow-indigo-500/30 transition-all duration-300 transform hover:scale-105"
+              >
+                <Github className="w-5 h-5" />
+                <span>Get Started</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
+              </Button>
+            </div>
           </div>
         </div>
       </nav>
@@ -51,83 +68,165 @@ export default function Home() {
       {/* Hero Section */}
       <main>
         <div className="relative overflow-hidden">
-          {/* Background Grid */}
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
-            <div className="absolute inset-0 opacity-20">
-              <div className="absolute top-0 left-0 w-full h-full" style={{
-                backgroundImage: `
-                  linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-                  linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-                `,
-                backgroundSize: '50px 50px'
-              }} />
-            </div>
-          </div>
-
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-            <div className="text-center">
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-6">
-                Understand any codebase in{' '}
-                <span className="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
-                  hours
-                </span>
-                , not weeks
-              </h1>
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
               
-              <p className="text-lg sm:text-xl lg:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-                Connect your GitHub repo and ask natural language questions about your codebase. 
-                StackMap maps your code so you don't have to.
-              </p>
+              {/* Left Column - Content */}
+              <div className="space-y-8">
+                <div className="space-y-4">
+                  <div className="inline-flex items-center space-x-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full px-4 py-2">
+                    <Sparkles className="w-4 h-4 text-yellow-400" />
+                    <span className="text-sm font-medium text-gray-300">AI-Powered Code Intelligence</span>
+                  </div>
+                  
+                  <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight">
+                    Understand{' '}
+                    <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                      any codebase
+                    </span>
+                    <br />
+                    in{' '}
+                    <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                      hours
+                    </span>
+                    , not weeks
+                  </h1>
+                </div>
+                
+                <p className="text-lg sm:text-xl lg:text-2xl text-gray-300 max-w-2xl leading-relaxed">
+                  Connect your GitHub repo and ask natural language questions about your codebase. 
+                  StackMap uses AI to map your code so you don't have to.
+                </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-                <Button
-                  onClick={handleGetStarted}
-                  size="lg"
-                  className="text-lg px-8 py-4 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-700 hover:to-cyan-700"
-                >
-                  Get Started with GitHub
-                </Button>
-                <div className="text-sm text-gray-400">
-                  Free to use · No credit card required
+                <div className="flex flex-col sm:flex-row gap-4 items-center">
+                  <Button
+                    onClick={handleGetStarted}
+                    size="lg"
+                    className="text-lg px-8 py-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-600 hover:from-indigo-700 hover:via-purple-700 hover:to-cyan-700 text-white font-bold rounded-xl shadow-xl shadow-indigo-500/30 hover:shadow-2xl hover:shadow-indigo-500/40 transition-all duration-300 transform hover:scale-105"
+                  >
+                    Start Mapping Your Code
+                  </Button>
+                  <div className="text-sm text-gray-400 flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <span>Free to use · No credit card required</span>
+                  </div>
+                </div>
+
+                {/* Stats */}
+                <div className="grid grid-cols-3 gap-6 pt-8">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-white">1000+</div>
+                    <div className="text-sm text-gray-400">Codebases Mapped</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-white">95%</div>
+                    <div className="text-sm text-gray-400">Accuracy Rate</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-white">24/7</div>
+                    <div className="text-sm text-gray-400">AI Support</div>
+                  </div>
                 </div>
               </div>
 
-              {/* Features Grid */}
-              <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 hover:border-gray-600 transition-all duration-300">
-                  <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-cyan-400 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
+              {/* Right Column - Visual */}
+              <div className="relative">
+                <div className="relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-sm border border-white/10 rounded-2xl p-8 shadow-2xl">
+                  {/* Floating Code Elements */}
+                  <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-indigo-500 to-cyan-400 rounded-full opacity-20 animate-pulse"></div>
+                  <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-br from-purple-500 to-pink-400 rounded-full opacity-20 animate-pulse delay-500"></div>
+                  
+                  <div className="relative">
+                    <div className="flex items-center space-x-3 mb-6">
+                      <div className="flex space-x-2">
+                        <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                        <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                        <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                      </div>
+                      <span className="text-sm text-gray-400 font-mono">stackmap.ai</span>
+                    </div>
+                    
+                    <div className="space-y-3 font-mono text-sm">
+                      <div className="text-green-400">{'> Analyzing repository structure...'}</div>
+                      <div className="text-blue-400">{'> Generating module graph...'}</div>
+                      <div className="text-purple-400">{'> Creating AI embeddings...'}</div>
+                      <div className="text-cyan-400">{'> Ready for natural language queries'}</div>
+                    </div>
+                    
+                    <div className="mt-6 p-4 bg-black/30 rounded-lg border border-white/10">
+                      <div className="text-gray-300 mb-2">Ask StackMap:</div>
+                      <div className="text-white font-medium">"Where does authentication happen?"</div>
+                      <div className="text-gray-400 text-sm mt-1">→ AI analyzes your code and provides precise answers</div>
+                    </div>
                   </div>
-                  <h3 className="text-white font-semibold text-lg mb-2">Living Codebase Map</h3>
-                  <p className="text-gray-400 text-sm">
-                    Automatically generated module graph that stays in sync with your code
-                  </p>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-                <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 hover:border-gray-600 transition-all duration-300">
-                  <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-white font-semibold text-lg mb-2">Ask Anything</h3>
-                  <p className="text-gray-400 text-sm">
-                    Natural language queries about your codebase with intelligent answers
-                  </p>
+        {/* Features Section */}
+        <div className="bg-gradient-to-b from-transparent to-gray-900/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+                Everything you need to{' '}
+                <span className="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+                  master your codebase
+                </span>
+              </h2>
+              <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+                From automatic documentation to intelligent code analysis, StackMap gives you 
+                superpowers for understanding and working with any codebase.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* Feature 1 */}
+              <div className="group bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-black/30">
+                <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-cyan-400 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Brain className="w-7 h-7 text-white" />
                 </div>
+                <h3 className="text-2xl font-bold text-white mb-4">AI-Powered Code Analysis</h3>
+                <p className="text-gray-400 leading-relaxed">
+                  Our AI analyzes your entire codebase to understand architecture, dependencies, 
+                  and patterns. Get intelligent insights about your code structure.
+                </p>
+                <div className="mt-6 flex items-center space-x-2 text-sm text-gray-500">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <span>Real-time analysis</span>
+                </div>
+              </div>
 
-                <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 hover:border-gray-600 transition-all duration-300">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center mb-4 mx-auto">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                  </div>
-                  <h3 className="text-white font-semibold text-lg mb-2">Auto Onboarding Guide</h3>
-                  <p className="text-gray-400 text-sm">
-                    One-click new hire documentation generated from your code
-                  </p>
+              {/* Feature 2 */}
+              <div className="group bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-black/30">
+                <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-400 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Users className="w-7 h-7 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">Auto Onboarding Guide</h3>
+                <p className="text-gray-400 leading-relaxed">
+                  Generate comprehensive documentation for new team members. 
+                  One-click creation of architecture guides and code explanations.
+                </p>
+                <div className="mt-6 flex items-center space-x-2 text-sm text-gray-500">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <span>Markdown export</span>
+                </div>
+              </div>
+
+              {/* Feature 3 */}
+              <div className="group bg-gradient-to-br from-gray-900/80 to-gray-800/80 backdrop-blur-sm border border-white/10 rounded-2xl p-8 hover:border-white/20 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-black/30">
+                <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Code className="w-7 h-7 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-white mb-4">Natural Language Queries</h3>
+                <p className="text-gray-400 leading-relaxed">
+                  Ask questions about your code in plain English. Get precise answers with 
+                  file references and code snippets.
+                </p>
+                <div className="mt-6 flex items-center space-x-2 text-sm text-gray-500">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <span>Context-aware responses</span>
                 </div>
               </div>
             </div>
@@ -136,10 +235,50 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-gray-800 bg-gray-900/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center text-gray-400">
-            <p>StackMap · Built for developers · 2026</p>
+      <footer className="border-t border-white/10 bg-white/5 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div className="md:col-span-2">
+              <div className="flex items-center space-x-4 mb-4">
+                <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-cyan-400 rounded-xl flex items-center justify-center">
+                  <Code className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">StackMap</h3>
+                  <p className="text-gray-400">AI Codebase Intelligence</p>
+                </div>
+              </div>
+              <p className="text-gray-400 max-w-md">
+                Empowering developers with AI-powered code analysis and natural language 
+                understanding for faster onboarding and better code comprehension.
+              </p>
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold text-white mb-4">Product</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Documentation</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">API</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-lg font-semibold text-white mb-4">Company</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><a href="#" className="hover:text-white transition-colors">About</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-white/10 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-400">© 2026 StackMap. Built for developers, by developers.</p>
+            <div className="flex space-x-4 text-gray-400">
+              <a href="#" className="hover:text-white transition-colors">Privacy</a>
+              <a href="#" className="hover:text-white transition-colors">Terms</a>
+              <a href="#" className="hover:text-white transition-colors">Security</a>
+            </div>
           </div>
         </div>
       </footer>
