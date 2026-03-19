@@ -34,6 +34,26 @@ const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
 
     const isDashboard = pathname === '/dashboard';
     const isRepoPage = pathname.startsWith('/repo/');
+    const isRepoFiles = pathname.match(/^\/repo\/[^/]+\/files$/);
+    const isRepoQuery = pathname.match(/^\/repo\/[^/]+\/query$/);
+    const isRepoGuide = pathname.match(/^\/repo\/[^/]+\/guide$/);
+    const isRepoDetails = pathname.match(/^\/repo\/[^/]+$/) && !pathname.endsWith('/files') && !pathname.endsWith('/query') && !pathname.endsWith('/guide');
+
+    // Extract repo ID for navigation
+    const repoMatch = pathname.match(/^\/repo\/([^/]+)/);
+    const repoId = repoMatch ? repoMatch[1] : null;
+
+    const navigateToRepoSection = (section: string) => {
+      if (repoId) {
+        router.push(`/repo/${repoId}/${section}`);
+      }
+    };
+
+    const navigateToRepo = () => {
+      if (repoId) {
+        router.push(`/repo/${repoId}`);
+      }
+    };
 
     return (
       <header
@@ -79,8 +99,8 @@ const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-gray-300 hover:text-white hover:bg-white/10"
-                    onClick={() => router.push(`${pathname}/files`)}
+                    className={`text-gray-300 hover:text-white hover:bg-white/10 ${isRepoFiles ? 'bg-white/10 text-white' : ''}`}
+                    onClick={() => navigateToRepoSection('files')}
                   >
                     <Database className="w-4 h-4 mr-2" />
                     Files
@@ -88,11 +108,29 @@ const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-gray-300 hover:text-white hover:bg-white/10"
-                    onClick={() => router.push(`${pathname}/query`)}
+                    className={`text-gray-300 hover:text-white hover:bg-white/10 ${isRepoQuery ? 'bg-white/10 text-white' : ''}`}
+                    onClick={() => navigateToRepoSection('query')}
                   >
                     <MessageSquare className="w-4 h-4 mr-2" />
                     Ask AI
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className={`text-gray-300 hover:text-white hover:bg-white/10 ${isRepoGuide ? 'bg-white/10 text-white' : ''}`}
+                    onClick={() => navigateToRepoSection('guide')}
+                  >
+                    <Database className="w-4 h-4 mr-2" />
+                    Guide
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className={`text-gray-300 hover:text-white hover:bg-white/10 ${isRepoDetails ? 'bg-white/10 text-white' : ''}`}
+                    onClick={navigateToRepo}
+                  >
+                    <Database className="w-4 h-4 mr-2" />
+                    Details
                   </Button>
                 </>
               )}
