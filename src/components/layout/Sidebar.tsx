@@ -17,10 +17,12 @@ import {
   X,
 } from 'lucide-react';
 
-interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
+  onSidebarToggle?: (isOpen: boolean) => void;
+}
 
 const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
-  ({ className, ...props }, ref) => {
+  ({ className, onSidebarToggle, ...props }, ref) => {
     const router = useRouter();
     const pathname = usePathname();
     const { logout } = useAuth();
@@ -36,11 +38,23 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
 
     const isActive = (href: string) => pathname === href;
 
+    const handleToggle = () => {
+      const newIsOpen = !isOpen;
+      setIsOpen(newIsOpen);
+      onSidebarToggle?.(newIsOpen);
+    };
+
+    const handleNavigate = (href: string) => {
+      router.push(href);
+      setIsOpen(false);
+      onSidebarToggle?.(false);
+    };
+
     return (
       <>
         {/* Mobile Menu Button */}
         <button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={handleToggle}
           className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-gray-800 rounded-lg border border-gray-700 text-white hover:bg-gray-700 transition-colors"
         >
           {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -76,10 +90,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
                     'w-full justify-start',
                     isActive(item.href) && 'bg-indigo-600/20 border border-indigo-500/30'
                   )}
-                  onClick={() => {
-                    router.push(item.href);
-                    setIsOpen(false); // Close sidebar on mobile when clicking a link
-                  }}
+                  onClick={() => handleNavigate(item.href)}
                 >
                   <Icon className="mr-3 h-4 w-4" />
                   {item.name}
@@ -95,6 +106,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
               onClick={() => {
                 logout();
                 setIsOpen(false);
+                onSidebarToggle?.(false);
               }}
             >
               <LogOut className="mr-3 h-4 w-4" />
@@ -107,7 +119,10 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
         {isOpen && (
           <div 
             className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30"
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              setIsOpen(false);
+              onSidebarToggle?.(false);
+            }}
           />
         )}
       </>
