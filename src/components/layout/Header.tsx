@@ -117,14 +117,17 @@ const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-64 bg-gray-800 border border-white/10">
-                <DropdownMenuItem className="text-gray-300 hover:text-white hover:bg-white/10">
+                <DropdownMenuItem 
+                  onClick={() => router.push('/profile')}
+                  className="text-gray-300 hover:text-white hover:bg-white/10"
+                >
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-cyan-400 rounded-lg flex items-center justify-center">
                       <Code className="w-4 h-4 text-white" />
                     </div>
                     <div>
-                      <div className="font-medium">Account Settings</div>
-                      <div className="text-xs text-gray-400">Manage your profile</div>
+                      <div className="font-medium">Profile Settings</div>
+                      <div className="text-xs text-gray-400">Manage your account</div>
                     </div>
                   </div>
                 </DropdownMenuItem>

@@ -4,13 +4,15 @@ export interface User {
   username: string;
   email?: string;
   avatarUrl?: string;
+  createdAt: string;
   user:{
-      id: string;
-      githubId: string;
-      username: string;
-      email?: string;
-      avatarUrl?: string;
-     }
+  id: string;
+  githubId: string;
+  username: string;
+  email?: string;
+  avatarUrl?: string;
+  createdAt: string;
+  }
 }
 
 export interface Repo {

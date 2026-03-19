@@ -8,9 +8,11 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
+  title?: string;
+  description?: string;
 }
 
-const Modal = ({ isOpen, onClose, children }: ModalProps) => {
+const Modal = ({ isOpen, onClose, children, title, description }: ModalProps) => {
   if (!isOpen) return null;
 
   return (
@@ -30,7 +32,17 @@ const Modal = ({ isOpen, onClose, children }: ModalProps) => {
             ✕
           </Button>
         </div>
-        {children}
+        <div className="space-y-4">
+          {title && (
+            <div>
+              <h2 className="text-xl font-semibold text-white">{title}</h2>
+              {description && (
+                <p className="text-sm text-gray-400 mt-1">{description}</p>
+              )}
+            </div>
+          )}
+          {children}
+        </div>
       </div>
     </div>
   );
