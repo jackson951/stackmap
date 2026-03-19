@@ -12,6 +12,7 @@ interface ConnectRepoModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConnect: () => void;
+  loading?: boolean;
 }
 
 const ConnectRepoModal = ({ isOpen, onClose, onConnect }: ConnectRepoModalProps) => {

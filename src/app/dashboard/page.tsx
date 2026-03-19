@@ -113,7 +113,7 @@ export default function DashboardPage() {
         <ConnectRepoModal
           isOpen={showConnectModal}
           onClose={() => setShowConnectModal(false)}
-          onConnect={handleConnectRepo}
+          onConnect={() => setShowConnectModal(true)}
           loading={connectLoading}
         />
       </div>

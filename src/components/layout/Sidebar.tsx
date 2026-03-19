@@ -74,7 +74,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
         >
           <div className="flex h-16 items-center justify-between border-b border-gray-700 px-6">
             <div className="flex items-center space-x-3">
-              <Map className="h-6 w-6 text-indigo-400" />
+              <img src="/stackmap.svg" alt="StackMap" className="h-6 w-6 text-indigo-400" />
               <span className="text-xl font-bold text-white">StackMap</span>
             </div>
           </div>

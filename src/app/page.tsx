@@ -38,7 +38,7 @@ export default function Home() {
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-4">
               <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/25">
-                <Code className="w-6 h-6 text-white" />
+                <img src="/stackmap.svg" alt="StackMap" className="w-6 h-6 text-white" />
               </div>
               <div>
                 <h1 className="text-xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
@@ -241,7 +241,7 @@ export default function Home() {
             <div className="md:col-span-2">
               <div className="flex items-center space-x-4 mb-4">
                 <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-cyan-400 rounded-xl flex items-center justify-center">
-                  <Code className="w-6 h-6 text-white" />
+                  <img src="/stackmap.svg" alt="StackMap" className="w-6 h-6 text-white" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-white">StackMap</h3>
