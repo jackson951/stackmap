@@ -55,6 +55,12 @@ export default function DashboardPage() {
   };
 
   // Redirect to home if not authenticated
+  useEffect(() => {
+    if (!user && !authLoading) {
+      router.push('/');
+    }
+  }, [user, authLoading, router]);
+
   if (authLoading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -63,8 +69,7 @@ export default function DashboardPage() {
     );
   }
 
-  if (!user && !authLoading) {
-    router.push('/');
+  if (!user) {
     return null;
   }
 
