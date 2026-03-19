@@ -12,6 +12,7 @@ import { showToast } from '@/lib/utils';
 import { QueryInput } from '@/components/query/QueryInput';
 import { QueryResult } from '@/components/query/QueryResult';
 import { QueryHistory } from '@/components/query/QueryHistory';
+import { DynamicBreadcrumb } from '@/components/layout/Breadcrumb';
 import { MessageSquare, FileText, ExternalLink } from 'lucide-react';
 
 export default function QueryPage() {
@@ -78,19 +79,7 @@ export default function QueryPage() {
     <AppShell user={user} onLogout={logout}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
-        <div className="mb-6">
-          <nav className="text-sm text-gray-400">
-            <span className="hover:text-white cursor-pointer" onClick={() => router.push('/dashboard')}>
-              Dashboard
-            </span>
-            <span className="mx-2">/</span>
-            <span className="hover:text-white cursor-pointer" onClick={() => router.push(`/repo/${repoId}`)}>
-              Repository
-            </span>
-            <span className="mx-2">/</span>
-            <span className="text-white font-medium">Ask AI</span>
-          </nav>
-        </div>
+        <DynamicBreadcrumb currentPath="/repo/[repoId]/query" />
 
         {/* Header */}
         <div className="mb-8">

@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/Button';
 import { Spinner } from '@/components/ui/Spinner';
 import { showToast } from '@/lib/utils';
 import { OnboardingGuide } from '@/components/guide/OnboardingGuide';
+import { DynamicBreadcrumb } from '@/components/layout/Breadcrumb';
 import { FileText, Scroll, RefreshCw, Download } from 'lucide-react';
 
 export default function GuidePage() {
@@ -83,19 +84,7 @@ export default function GuidePage() {
     <AppShell user={user} onLogout={logout}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
-        <div className="mb-6">
-          <nav className="text-sm text-gray-400">
-            <span className="hover:text-white cursor-pointer" onClick={() => router.push('/dashboard')}>
-              Dashboard
-            </span>
-            <span className="mx-2">/</span>
-            <span className="hover:text-white cursor-pointer" onClick={() => router.push(`/repo/${repoId}`)}>
-              Repository
-            </span>
-            <span className="mx-2">/</span>
-            <span className="text-white font-medium">Onboarding Guide</span>
-          </nav>
-        </div>
+        <DynamicBreadcrumb currentPath="/repo/[repoId]/guide" />
 
         {/* Header */}
         <div className="mb-8">

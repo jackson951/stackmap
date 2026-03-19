@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu';
 import { User } from '@/types';
+import { Breadcrumb } from './Breadcrumb';
 
 interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string;
