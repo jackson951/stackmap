@@ -162,12 +162,14 @@ const RepoList = ({ repos, loading, onConnect }: RepoListProps) => {
       </div>
 
       {/* Repositories Grid */}
-      <div className="grid gap-6 sm:gap-8">
-        {/* Responsive Grid: 1 card on mobile, 2 on tablet, 3 on desktop, 4 on large screens */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {repos.map((repo) => (
-            <RepoCard key={repo.id} repo={repo} />
-          ))}
+      <div className="grid gap-8">
+        {/* Enhanced Responsive Grid: Optimized for all screen sizes */}
+        <div className="grid gap-6 sm:gap-8">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {repos.map((repo) => (
+              <RepoCard key={repo.id} repo={repo} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
