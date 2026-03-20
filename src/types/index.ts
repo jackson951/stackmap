@@ -37,6 +37,12 @@ export interface RepoFile {
   size?: number;
   commitCount: number;
   summary?: string;
+  lastModified?: string;
+  contributors?: string[];
+}
+
+export interface RepoFileContent extends RepoFile {
+  content: string;
 }
 
 export interface Query {

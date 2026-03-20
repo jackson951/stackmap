@@ -11,9 +11,10 @@ interface RepoListProps {
   repos: Repo[];
   loading?: boolean;
   onConnect?: () => void;
+  showStats?: boolean;
 }
 
-const RepoList = ({ repos, loading, onConnect }: RepoListProps) => {
+const RepoList = ({ repos, loading, onConnect, showStats = true }: RepoListProps) => {
   if (loading) {
     return (
       <div className="grid gap-6 sm:gap-8">
@@ -119,47 +120,49 @@ const RepoList = ({ repos, loading, onConnect }: RepoListProps) => {
   return (
     <div className="space-y-8">
       {/* Stats Header */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-gradient-to-br from-indigo-500/20 to-cyan-500/20 border border-white/10 rounded-xl p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-400">Total Repositories</p>
-              <p className="text-2xl font-bold text-white">{repos.length}</p>
-            </div>
-            <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-cyan-400 rounded-xl flex items-center justify-center">
-              <Database className="w-6 h-6 text-white" />
+      {showStats && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-gradient-to-br from-indigo-500/20 to-cyan-500/20 border border-white/10 rounded-xl p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-400">Total Repositories</p>
+                <p className="text-2xl font-bold text-white">{repos.length}</p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-cyan-400 rounded-xl flex items-center justify-center">
+                <Database className="w-6 h-6 text-white" />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-white/10 rounded-xl p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-400">Indexed Repositories</p>
-              <p className="text-2xl font-bold text-white">
-                {repos.filter(repo => repo.isIndexed).length}
-              </p>
-            </div>
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-400 rounded-xl flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-white" />
+          <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-white/10 rounded-xl p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-400">Indexed Repositories</p>
+                <p className="text-2xl font-bold text-white">
+                  {repos.filter(repo => repo.isIndexed).length}
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-400 rounded-xl flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-white" />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-white/10 rounded-xl p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-400">Ready for AI Queries</p>
-              <p className="text-2xl font-bold text-white">
-                {repos.filter(repo => repo.isIndexed).length}
-              </p>
-            </div>
-            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-400 rounded-xl flex items-center justify-center">
-              <Users className="w-6 h-6 text-white" />
+          <div className="bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-white/10 rounded-xl p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-400">Ready for AI Queries</p>
+                <p className="text-2xl font-bold text-white">
+                  {repos.filter(repo => repo.isIndexed).length}
+                </p>
+              </div>
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-400 rounded-xl flex items-center justify-center">
+                <Users className="w-6 h-6 text-white" />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Repositories Grid */}
       <div className="grid gap-8">

@@ -1,4 +1,4 @@
-import { User, Repo, RepoFile, Query, IndexRepoResponse, QueryRepoResponse, GenerateGuideResponse } from '@/types';
+import { User, Repo, RepoFile, RepoFileContent, Query, IndexRepoResponse, QueryRepoResponse, GenerateGuideResponse } from '@/types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
@@ -19,11 +19,21 @@ async function apiFetch<T>(endpoint: string, options: RequestInit = {}): Promise
 
   if (!response.ok) {
     let errorMessage = 'An error occurred';
+    let errorPayload: any = {};
     try {
-      const errorData = await response.json();
-      errorMessage = errorData.error || errorData.message || 'An error occurred';
+      const text = await response.text();
+      if (text) {
+        try {
+          errorPayload = JSON.parse(text);
+        } catch {
+          errorPayload = { raw: text };
+        }
+        errorMessage = errorPayload.error || errorPayload.message || response.statusText || errorMessage;
+      } else {
+        errorMessage = response.statusText || errorMessage;
+      }
     } catch {
-      errorMessage = response.statusText || 'An error occurred';
+      errorMessage = response.statusText || errorMessage;
     }
     
     // Log the full error details for debugging
@@ -31,7 +41,8 @@ async function apiFetch<T>(endpoint: string, options: RequestInit = {}): Promise
       url: endpoint,
       status: response.status,
       statusText: response.statusText,
-      errorMessage: errorMessage
+      errorMessage,
+      payload: errorPayload,
     });
     
     throw new Error(errorMessage);
@@ -67,6 +78,11 @@ export const indexingApi = {
     }),
   getRepoFiles: (repoId: string): Promise<RepoFile[]> => 
     apiFetch(`/api/repos/${repoId}/files`).then((data: any) => data.files || data),
+};
+
+export const filesApi = {
+  getRepoFileContent: (repoId: string, path: string): Promise<RepoFileContent> =>
+    apiFetch(`/api/repos/${repoId}/files/content?path=${encodeURIComponent(path)}`),
 };
 
 // Query endpoints

@@ -1,63 +1,65 @@
 'use client';
 
-import * as React from 'react';
 import { cn } from '@/lib/utils';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { RepoFile } from '@/types';
 
 interface ChurnHeatmapProps {
-  files: any[];
+  files: RepoFile[];
 }
 
 const ChurnHeatmap = ({ files }: ChurnHeatmapProps) => {
-  const topFiles = files
-    .sort((a, b) => b.commitCount - a.commitCount)
-    .slice(0, 10);
+  if (files.length === 0) {
+    return (
+      <div className="text-sm text-gray-400">
+        No churn data available yet. Index your repo to unlock insights.
+      </div>
+    );
+  }
 
-  const getMaxCommitCount = () => {
-    return Math.max(...files.map(f => f.commitCount), 1);
+  const validFiles = files.filter(file => typeof file.commitCount === 'number' && file.commitCount >= 0);
+  const topFiles = validFiles
+    .sort((a, b) => (b.commitCount || 0) - (a.commitCount || 0))
+    .slice(0, 6);
+
+  const maxCommits = validFiles.reduce(
+    (max, file) => Math.max(max, file.commitCount || 0),
+    0
+  ) || 1;
+
+  const getHeatColor = (value: number) => {
+    const intensity = Math.min(100, (value / maxCommits) * 100);
+    if (intensity >= 75) return 'bg-gradient-to-r from-rose-500 to-red-600';
+    if (intensity >= 50) return 'bg-gradient-to-r from-amber-500 to-orange-500';
+    return 'bg-gradient-to-r from-sky-500 to-cyan-500';
   };
-
-  const getBarColor = (commitCount: number, maxCount: number) => {
-    const percentage = (commitCount / maxCount) * 100;
-    if (percentage >= 70) return 'bg-red-500';
-    if (percentage >= 40) return 'bg-amber-500';
-    return 'bg-green-500';
-  };
-
-  const maxCount = getMaxCommitCount();
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center space-x-2">
-          <span className="text-red-400">🔥</span>
-          <span>High-Churn Files</span>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-3">
-          {topFiles.map((file) => (
-            <div key={file.id} className="space-y-1">
-              <div className="flex justify-between text-sm">
-                <span className="text-white font-medium">{file.name}</span>
-                <span className="text-gray-400">{file.commitCount} commits</span>
-              </div>
-              <div className="w-full bg-gray-700 rounded-full h-2">
-                <div
-                  className={cn(
-                    'h-2 rounded-full transition-all duration-300',
-                    getBarColor(file.commitCount, maxCount)
-                  )}
-                  style={{
-                    width: `${(file.commitCount / maxCount) * 100}%`
-                  }}
-                />
-              </div>
+    <div className="space-y-4">
+      {topFiles.map((file) => {
+        const commits = file.commitCount || 0;
+        return (
+          <div key={file.id} className="space-y-1">
+            <div className="flex items-center justify-between text-xs uppercase tracking-wider text-gray-400">
+              <span className="font-semibold text-white truncate">{file.name}</span>
+              <span>{commits} commits</span>
             </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+            <div className="w-full bg-white/5 rounded-full h-2 overflow-hidden">
+              <div
+                className={cn(
+                  'h-full rounded-full transition-all duration-500',
+                  getHeatColor(commits)
+                )}
+                style={{ width: `${Math.min(100, (commits / maxCommits) * 100)}%` }}
+              />
+            </div>
+            <div className="text-[11px] text-gray-500 flex justify-between">
+              <span>{file.path}</span>
+              <span>{Math.round((commits / maxCommits) * 100)}% heat</span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 };
 

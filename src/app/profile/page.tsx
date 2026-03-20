@@ -44,11 +44,13 @@ export default function ProfilePage() {
   const handleDeleteAccount = async () => {
     setIsDeleting(true);
     try {
-      const response = await fetch('/api/auth/me', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      const token = localStorage.getItem('stackmap_token');
+      const response = await fetch(`${apiUrl}/api/auth/me`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
         },
       });
 
