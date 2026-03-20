@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useRepos } from '@/hooks/useRepos';
 import { AppShell } from '@/components/layout/AppShell';
@@ -17,7 +17,6 @@ import { Plus, GitBranch, Database, FileText, Sparkles, Globe } from 'lucide-rea
 
 export default function DashboardPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { user, loading: authLoading, logout, login } = useAuthContext();
   const { repos, loading: reposLoading, fetchRepos, connectRepo } = useRepos();
   
@@ -26,7 +25,12 @@ export default function DashboardPage() {
 
   // Handle token from URL
   useEffect(() => {
-    const token = searchParams.get('token');
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
     if (token) {
       // Login with the token
       login(token);
@@ -34,7 +38,7 @@ export default function DashboardPage() {
       router.replace('/dashboard');
       showToast('Successfully connected to GitHub!', 'success');
     }
-  }, [searchParams, router, login]);
+  }, [router, login]);
 
   // Fetch repos when user is available
   useEffect(() => {
