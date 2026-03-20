@@ -1,13 +1,17 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default function CallbackPage() {
   const router = useRouter();
-  const params = useSearchParams();
 
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
     const token = params.get('token');
 
     if (token) {
@@ -16,7 +20,7 @@ export default function CallbackPage() {
     } else {
       router.push('/');
     }
-  }, [params, router]);
+  }, [router]);
 
   return <p>Logging you in...</p>;
 }
