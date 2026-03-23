@@ -4,10 +4,10 @@
 
 Connect your GitHub repositories and ask natural language questions about your codebase. StackMap uses AI to analyze your code structure, dependencies, and patterns to provide intelligent insights and answers.
 
-![StackMap Banner](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
-![Tailwind CSS-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white)
-![Supabase-3699FF?style=for-the-badge&logo=supabase&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3699FF?style=for-the-badge&logo=supabase&logoColor=white)
 
 ## 🚀 Features
 
