@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ReposProvider } from "@/contexts/ReposContext";
 import { QueryProvider } from "@/contexts/QueryContext";
+import { Header } from "@/components/layout/Header";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -32,7 +33,10 @@ export default function RootLayout({
         <AuthProvider>
           <ReposProvider>
             <QueryProvider>
-              {children}
+              <Header isPublic={false} />
+              <main className="flex-1">
+                {children}
+              </main>
             </QueryProvider>
           </ReposProvider>
         </AuthProvider>

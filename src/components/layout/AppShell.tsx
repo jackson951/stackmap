@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { cn } from '@/lib/utils';
-import { Header } from './Header';
 import { User } from '@/types';
 
 interface AppShellProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -19,8 +18,6 @@ const AppShell = React.forwardRef<HTMLDivElement, AppShellProps>(
         className={cn('min-h-screen bg-gray-900', className)}
         {...props}
       >
-        <Header user={user} onLogout={onLogout} />
-        
         <main className="mt-16 min-h-[calc(100vh-64px)] p-6">
           {children}
         </main>

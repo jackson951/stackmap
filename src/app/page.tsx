@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { getLoginUrl } from '@/lib/auth';
 import { Button } from '@/components/ui/Button';
 import { Github, Code, Brain, Users, Sparkles, ArrowRight } from 'lucide-react';
+import { Header } from '@/components/layout/Header';
 
 export default function Home() {
   const router = useRouter();
@@ -26,46 +27,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-900 to-black">
-      {/* Animated Background */}
-      <div className="fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(99,102,241,0.1),transparent_50%)]"></div>
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-      </div>
-
-      {/* Navigation */}
-      <nav className="border-b border-white/10 bg-white/5 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/25">
-                <img src="/stackmap.svg" alt="StackMap" className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
-                  StackMap
-                </h1>
-                <p className="text-xs text-gray-400">AI Codebase Intelligence</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <div className="hidden md:flex items-center space-x-2 text-sm text-gray-300">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span>AI-Powered</span>
-              </div>
-              <Button
-                onClick={handleGetStarted}
-                className="group flex items-center space-x-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-xl shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:shadow-indigo-500/30 transition-all duration-300 transform hover:scale-105"
-              >
-                <Github className="w-5 h-5" />
-                <span>Get Started</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
+      <Header isPublic={true} />
+      
       {/* Hero Section */}
       <main>
         <div className="relative overflow-hidden">
