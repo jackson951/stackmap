@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/hooks/useAuth';
@@ -15,16 +16,17 @@ import {
 } from '@/components/ui/DropdownMenu';
 import { User } from '@/types';
 import { Breadcrumb } from './Breadcrumb';
-import { Menu, X, Home, Database, MessageSquare, LogOut } from 'lucide-react';
+import { Menu, X, Home, Database, MessageSquare, LogOut, Github, Sparkles, ArrowRight } from 'lucide-react';
 
 interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string;
   user?: User | null;
   onLogout?: () => void;
+  isPublic?: boolean;
 }
 
 const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
-  ({ className, title, user, onLogout, ...props }, ref) => {
+  ({ className, title, user, onLogout, isPublic = false, ...props }, ref) => {
     const router = useRouter();
     const pathname = usePathname();
     const { user: authUser, logout: authLogout } = useAuth();
@@ -33,6 +35,16 @@ const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
     const handleLogout = onLogout || authLogout;
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
+    // Public navigation links
+    const publicNavLinks = [
+      { href: '/', label: 'Home' },
+      { href: '/about', label: 'About' },
+      { href: '/blog', label: 'Blog' },
+      { href: '/careers', label: 'Careers' },
+      { href: '/contact', label: 'Contact' },
+    ];
+
+    // Authenticated navigation logic
     const isDashboard = pathname === '/dashboard';
     const isRepoPage = pathname.startsWith('/repo/');
     const isRepoFiles = pathname.match(/^\/repo\/[^/]+\/files$/);
@@ -53,6 +65,15 @@ const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
     const navigateToRepo = () => {
       if (repoId) {
         router.push(`/repo/${repoId}`);
+      }
+    };
+
+    const handleGetStarted = () => {
+      if (isPublic) {
+        // Redirect to the backend OAuth endpoint which will handle GitHub OAuth flow
+        window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/github`;
+      } else {
+        router.push('/dashboard');
       }
     };
 
@@ -88,200 +109,270 @@ const Header = React.forwardRef<HTMLDivElement, HeaderProps>(
               </div>
               <div>
                 <h1 className="text-xl font-bold bg-gradient-to-r from-white via-gray-200 to-gray-400 bg-clip-text text-transparent">
-                  {title || (isDashboard ? 'Dashboard' : isRepoPage ? 'Repository' : 'StackMap')}
+                  {title || (isPublic ? 'StackMap' : isDashboard ? 'Dashboard' : isRepoPage ? 'Repository' : 'StackMap')}
                 </h1>
-                <p className="text-xs text-gray-400">AI Codebase Intelligence</p>
+                <p className="text-xs text-gray-400">
+                  {isPublic ? 'AI Codebase Intelligence' : 'AI Codebase Intelligence'}
+                </p>
               </div>
             </div>
           </div>
 
           <div className="flex items-center space-x-4">
-            {/* Quick Actions */}
-            <div className="hidden lg:flex items-center space-x-2">
+            {/* Navigation based on auth state */}
+            {isPublic ? (
+              // Public navigation
+              <>
+                <nav className="hidden lg:flex items-center space-x-4">
+                  {publicNavLinks.map(link => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="text-sm text-gray-300 hover:text-white transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </nav>
+                <Button
+                  variant="ghost"
+                  className="border border-white/20 bg-white/5 text-white flex items-center space-x-2"
+                  onClick={handleGetStarted}
+                >
+                  <Github className="w-4 h-4" />
+                  <span>Get Started</span>
+                  <ArrowRight className="w-4 h-4 text-gray-300" />
+                </Button>
+              </>
+            ) : (
+              // Authenticated navigation
+              <>
+                {/* Quick Actions */}
+                <div className="hidden lg:flex items-center space-x-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-gray-300 hover:text-white hover:bg-white/10"
+                    onClick={() => router.push('/dashboard')}
+                  >
+                    <Home className="w-4 h-4 mr-2" />
+                    Dashboard
+                  </Button>
+                  {isRepoPage && (
+                    <>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className={`text-gray-300 hover:text-white hover:bg-white/10 ${isRepoFiles ? 'bg-white/10 text-white' : ''}`}
+                        onClick={() => navigateToRepoSection('files')}
+                      >
+                        <Database className="w-4 h-4 mr-2" />
+                        Files
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className={`text-gray-300 hover:text-white hover:bg-white/10 ${isRepoQuery ? 'bg-white/10 text-white' : ''}`}
+                        onClick={() => navigateToRepoSection('query')}
+                      >
+                        <MessageSquare className="w-4 h-4 mr-2" />
+                        Ask AI
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className={`text-gray-300 hover:text-white hover:bg-white/10 ${isRepoGuide ? 'bg-white/10 text-white' : ''}`}
+                        onClick={() => navigateToRepoSection('guide')}
+                      >
+                        <Database className="w-4 h-4 mr-2" />
+                        Guide
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className={`text-gray-300 hover:text-white hover:bg-white/10 ${isRepoDetails ? 'bg-white/10 text-white' : ''}`}
+                        onClick={navigateToRepo}
+                      >
+                        <Database className="w-4 h-4 mr-2" />
+                        Details
+                      </Button>
+                    </>
+                  )}
+                </div>
+                
+                {/* User Menu */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative group">
+                      <div className="relative">
+                        <Avatar
+                          src={currentUser?.avatarUrl}
+                          alt={currentUser?.username}
+                          className="h-10 w-10 mr-3"
+                        />
+                        <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white group-hover:scale-110 transition-transform duration-200"></div>
+                      </div>
+                      <div className="text-left">
+                        <div className="text-sm font-medium text-white">{currentUser?.username}</div>
+                        <div className="text-xs text-gray-400">Developer</div>
+                      </div>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-64 bg-gray-800 border border-white/10">
+                    <DropdownMenuItem 
+                      onClick={() => router.push('/profile')}
+                      className="text-gray-300 hover:text-white hover:bg-white/10"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-cyan-400 rounded-lg flex items-center justify-center">
+                          <img src="/stackmap.svg" alt="StackMap" className="w-4 h-4 text-white" />
+                        </div>
+                        <div>
+                          <div className="font-medium">Profile Settings</div>
+                          <div className="text-xs text-gray-400">Manage your account</div>
+                        </div>
+                      </div>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="text-gray-300 hover:text-white hover:bg-white/10">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-400 rounded-lg flex items-center justify-center">
+                          <Database className="w-4 h-4 text-white" />
+                        </div>
+                        <div>
+                          <div className="font-medium">Connected Repos</div>
+                          <div className="text-xs text-gray-400">Manage repositories</div>
+                        </div>
+                      </div>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={handleLogout} 
+                      className="text-red-400 hover:text-red-300 hover:bg-red-500/10 mt-2"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-pink-500 rounded-lg flex items-center justify-center">
+                          <LogOut className="w-4 h-4 text-white" />
+                        </div>
+                        <div>
+                          <div className="font-medium">Sign Out</div>
+                          <div className="text-xs text-red-300">End your session</div>
+                        </div>
+                      </div>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Mobile Navigation Menu - Public */}
+        {isPublic && (
+          <div 
+            className={cn(
+              'lg:hidden fixed top-16 left-0 right-0 bg-gray-900/95 backdrop-blur-xl border-b border-white/10 transform transition-transform duration-300 ease-in-out',
+              isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+            )}
+          >
+            <nav className="px-6 py-4 space-y-2">
+              {publicNavLinks.map(link => (
+                <Button
+                  key={link.href}
+                  variant="ghost"
+                  className="w-full justify-start text-gray-300 hover:text-white hover:bg-white/10"
+                  onClick={() => {
+                    router.push(link.href);
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  {link.label}
+                </Button>
+              ))}
               <Button
                 variant="ghost"
-                size="sm"
-                className="text-gray-300 hover:text-white hover:bg-white/10"
-                onClick={() => router.push('/dashboard')}
+                className="w-full justify-start text-gray-300 hover:text-white hover:bg-white/10"
+                onClick={() => {
+                  handleGetStarted();
+                  setIsMobileMenuOpen(false);
+                }}
               >
-                <Home className="w-4 h-4 mr-2" />
+                Get Started
+              </Button>
+            </nav>
+          </div>
+        )}
+
+        {/* Mobile Navigation Menu - Authenticated */}
+        {!isPublic && (
+          <div 
+            className={cn(
+              'lg:hidden fixed top-16 left-0 right-0 bg-gray-900/95 backdrop-blur-xl border-b border-white/10 transform transition-transform duration-300 ease-in-out',
+              isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+            )}
+          >
+            <nav className="px-6 py-4 space-y-2">
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-gray-300 hover:text-white hover:bg-white/10"
+                onClick={() => {
+                  router.push('/dashboard');
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                <Home className="w-4 h-4 mr-3" />
                 Dashboard
               </Button>
+              
               {isRepoPage && (
                 <>
                   <Button
                     variant="ghost"
-                    size="sm"
-                    className={`text-gray-300 hover:text-white hover:bg-white/10 ${isRepoFiles ? 'bg-white/10 text-white' : ''}`}
-                    onClick={() => navigateToRepoSection('files')}
+                    className={`w-full justify-start text-gray-300 hover:text-white hover:bg-white/10 ${isRepoFiles ? 'bg-white/10 text-white' : ''}`}
+                    onClick={() => {
+                      navigateToRepoSection('files');
+                      setIsMobileMenuOpen(false);
+                    }}
                   >
-                    <Database className="w-4 h-4 mr-2" />
+                    <Database className="w-4 h-4 mr-3" />
                     Files
                   </Button>
                   <Button
                     variant="ghost"
-                    size="sm"
-                    className={`text-gray-300 hover:text-white hover:bg-white/10 ${isRepoQuery ? 'bg-white/10 text-white' : ''}`}
-                    onClick={() => navigateToRepoSection('query')}
+                    className={`w-full justify-start text-gray-300 hover:text-white hover:bg-white/10 ${isRepoQuery ? 'bg-white/10 text-white' : ''}`}
+                    onClick={() => {
+                      navigateToRepoSection('query');
+                      setIsMobileMenuOpen(false);
+                    }}
                   >
-                    <MessageSquare className="w-4 h-4 mr-2" />
+                    <MessageSquare className="w-4 h-4 mr-3" />
                     Ask AI
                   </Button>
                   <Button
                     variant="ghost"
-                    size="sm"
-                    className={`text-gray-300 hover:text-white hover:bg-white/10 ${isRepoGuide ? 'bg-white/10 text-white' : ''}`}
-                    onClick={() => navigateToRepoSection('guide')}
+                    className={`w-full justify-start text-gray-300 hover:text-white hover:bg-white/10 ${isRepoGuide ? 'bg-white/10 text-white' : ''}`}
+                    onClick={() => {
+                      navigateToRepoSection('guide');
+                      setIsMobileMenuOpen(false);
+                    }}
                   >
-                    <Database className="w-4 h-4 mr-2" />
+                    <Database className="w-4 h-4 mr-3" />
                     Guide
                   </Button>
                   <Button
                     variant="ghost"
-                    size="sm"
-                    className={`text-gray-300 hover:text-white hover:bg-white/10 ${isRepoDetails ? 'bg-white/10 text-white' : ''}`}
-                    onClick={navigateToRepo}
+                    className={`w-full justify-start text-gray-300 hover:text-white hover:bg-white/10 ${isRepoDetails ? 'bg-white/10 text-white' : ''}`}
+                    onClick={() => {
+                      navigateToRepo();
+                      setIsMobileMenuOpen(false);
+                    }}
                   >
-                    <Database className="w-4 h-4 mr-2" />
+                    <Database className="w-4 h-4 mr-3" />
                     Details
                   </Button>
                 </>
               )}
-            </div>
-            
-            {/* User Menu */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative group">
-                  <div className="relative">
-                    <Avatar
-                      src={currentUser?.avatarUrl}
-                      alt={currentUser?.username}
-                      className="h-10 w-10 mr-3"
-                    />
-                    <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white group-hover:scale-110 transition-transform duration-200"></div>
-                  </div>
-                  <div className="text-left">
-                    <div className="text-sm font-medium text-white">{currentUser?.username}</div>
-                    <div className="text-xs text-gray-400">Developer</div>
-                  </div>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-64 bg-gray-800 border border-white/10">
-                <DropdownMenuItem 
-                  onClick={() => router.push('/profile')}
-                  className="text-gray-300 hover:text-white hover:bg-white/10"
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-cyan-400 rounded-lg flex items-center justify-center">
-                      <img src="/stackmap.svg" alt="StackMap" className="w-4 h-4 text-white" />
-                    </div>
-                    <div>
-                      <div className="font-medium">Profile Settings</div>
-                      <div className="text-xs text-gray-400">Manage your account</div>
-                    </div>
-                  </div>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="text-gray-300 hover:text-white hover:bg-white/10">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-400 rounded-lg flex items-center justify-center">
-                      <Database className="w-4 h-4 text-white" />
-                    </div>
-                    <div>
-                      <div className="font-medium">Connected Repos</div>
-                      <div className="text-xs text-gray-400">Manage repositories</div>
-                    </div>
-                  </div>
-                </DropdownMenuItem>
-                <DropdownMenuItem 
-                  onClick={handleLogout} 
-                  className="text-red-400 hover:text-red-300 hover:bg-red-500/10 mt-2"
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-pink-500 rounded-lg flex items-center justify-center">
-                      <LogOut className="w-4 h-4 text-white" />
-                    </div>
-                    <div>
-                      <div className="font-medium">Sign Out</div>
-                      <div className="text-xs text-red-300">End your session</div>
-                    </div>
-                  </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            </nav>
           </div>
-        </div>
-
-        {/* Mobile Navigation Menu */}
-        <div 
-          className={cn(
-            'lg:hidden fixed top-16 left-0 right-0 bg-gray-900/95 backdrop-blur-xl border-b border-white/10 transform transition-transform duration-300 ease-in-out',
-            isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-          )}
-        >
-          <nav className="px-6 py-4 space-y-2">
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-gray-300 hover:text-white hover:bg-white/10"
-              onClick={() => {
-                router.push('/dashboard');
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              <Home className="w-4 h-4 mr-3" />
-              Dashboard
-            </Button>
-            
-            {isRepoPage && (
-              <>
-                <Button
-                  variant="ghost"
-                  className={`w-full justify-start text-gray-300 hover:text-white hover:bg-white/10 ${isRepoFiles ? 'bg-white/10 text-white' : ''}`}
-                  onClick={() => {
-                    navigateToRepoSection('files');
-                    setIsMobileMenuOpen(false);
-                  }}
-                >
-                  <Database className="w-4 h-4 mr-3" />
-                  Files
-                </Button>
-                <Button
-                  variant="ghost"
-                  className={`w-full justify-start text-gray-300 hover:text-white hover:bg-white/10 ${isRepoQuery ? 'bg-white/10 text-white' : ''}`}
-                  onClick={() => {
-                    navigateToRepoSection('query');
-                    setIsMobileMenuOpen(false);
-                  }}
-                >
-                  <MessageSquare className="w-4 h-4 mr-3" />
-                  Ask AI
-                </Button>
-                <Button
-                  variant="ghost"
-                  className={`w-full justify-start text-gray-300 hover:text-white hover:bg-white/10 ${isRepoGuide ? 'bg-white/10 text-white' : ''}`}
-                  onClick={() => {
-                    navigateToRepoSection('guide');
-                    setIsMobileMenuOpen(false);
-                  }}
-                >
-                  <Database className="w-4 h-4 mr-3" />
-                  Guide
-                </Button>
-                <Button
-                  variant="ghost"
-                  className={`w-full justify-start text-gray-300 hover:text-white hover:bg-white/10 ${isRepoDetails ? 'bg-white/10 text-white' : ''}`}
-                  onClick={() => {
-                    navigateToRepo();
-                    setIsMobileMenuOpen(false);
-                  }}
-                >
-                  <Database className="w-4 h-4 mr-3" />
-                  Details
-                </Button>
-              </>
-            )}
-          </nav>
-        </div>
+        )}
       </header>
     );
   }
